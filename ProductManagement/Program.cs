@@ -20,27 +20,27 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/customer", async (
-    B2CCustomer newCustomer,
+app.MapPost("/product", async (
+    B2CProduct newProduct,
     DaprClient daprClient
     ) => {
-        Console.WriteLine($"Creating new customer for {newCustomer.Email}.");
+        Console.WriteLine($"Creating new customer for {newProduct.Name}.");
         
         var keyResult = await daprClient.GetSecretAsync(SECRET_STORE_NAME, STRIPE_KEY_NAME);
         StripeConfiguration.ApiKey = keyResult[STRIPE_KEY_NAME];
 
-        var customerService = new CustomerService();
-        var customerOptions = new CustomerCreateOptions
+        var service = new ProductService();
+        var productOptions = new ProductCreateOptions
         {
-            Email = newCustomer.Email,
-            Name = newCustomer.Name
+            Name = newProduct.Name
         };
-        var createdCustomer = await customerService.CreateAsync(customerOptions);
 
-        return Results.Ok(createdCustomer);
+        var createdProduct = await service.CreateAsync(productOptions);
+
+        return Results.Ok(createdProduct);
 });
 
-app.MapGet("/customer", async (
+app.MapGet("/product", async (
     DaprClient daprClient
     ) => {
         Console.WriteLine($"Listing product details.");;
@@ -48,8 +48,8 @@ app.MapGet("/customer", async (
         var keyResult = await daprClient.GetSecretAsync(SECRET_STORE_NAME, STRIPE_KEY_NAME);
         StripeConfiguration.ApiKey = keyResult[STRIPE_KEY_NAME];
         
-        var service = new CustomerService();
-        var options = new CustomerListOptions
+        var service = new ProductService();
+        var options = new ProductListOptions
         {
             Limit = 5,
         };
@@ -61,29 +61,29 @@ app.MapGet("/customer", async (
         return Results.Ok(searchResults);
 });
 
-app.MapGet("/customer/{email}", async (
-    string email,
+app.MapGet("/product/{name}", async (
+    string name,
     DaprClient daprClient
     ) => {
-        Console.WriteLine($"Getting customer details for {email}.");;
+        Console.WriteLine($"Getting product details for {name}.");;
         
         var keyResult = await daprClient.GetSecretAsync(SECRET_STORE_NAME, STRIPE_KEY_NAME);
         StripeConfiguration.ApiKey = keyResult[STRIPE_KEY_NAME];
         
-        var service = new CustomerService();
-        var options = new CustomerSearchOptions
+        var service = new ProductService();
+        var options = new ProductSearchOptions
         {
-            Query = $"email:'{email}'",
+            Query = $"name:'{name}'",
         };
         var searchResults = await service.SearchAsync(options);
-        var foundCustomer = searchResults.FirstOrDefault();
-        if  (foundCustomer == null)
+        var foundProduct = searchResults.FirstOrDefault();
+        if  (foundProduct == null)
         {
             return Results.NotFound();
         }
-        return Results.Ok(foundCustomer);
+        return Results.Ok(foundProduct);
 });
 
 app.Run();
 
-record B2CCustomer(string Name, string Email);
+record B2CProduct(string Id, string Name);

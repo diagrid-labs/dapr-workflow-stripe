@@ -9,6 +9,13 @@ apps:
     command: ["dotnet", "run"]
     appLogDestination: fileAndConsole
     daprdLogDestination: fileAndConsole
+  - appID: product
+    appDirPath: ProductManagement
+    appPort: 5049
+    daprHTTPPort: 3512
+    command: ["dotnet", "run"]
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole
 #  - appID: shipping
 #    appDirPath: ShippingApp
 #    appPort: 5051
