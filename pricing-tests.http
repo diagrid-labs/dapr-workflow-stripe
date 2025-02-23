@@ -1,0 +1,44 @@
+@appUrl= http://localhost:5251
+@daprUrl= http://localhost:3514
+
+### List all meters
+GET {{appUrl}}/meter
+
+### Create a meter
+POST {{appUrl}}/meter
+Content-Type: application/json
+
+{
+  "displayName": "Calculation API",
+  "eventName": "calculation_executed"
+}
+
+
+### List all prices
+GET {{appUrl}}/price
+
+
+@meterId=mtr_test_61S56KWoJm1IrL3Wd41IPiLAcEvqTKCe
+@productId=prod_RpLyImjdXbro76
+### Create a price
+POST {{appUrl}}/price
+Content-Type: application/json
+
+{
+  "billingScheme": "per_unit",
+  "currency": "usd",
+  "lookupKey": "paid_calculation_usage",
+  "productId" : "{{productId}}"
+  "recurring": {
+    "interval": "month",
+    "intervalCount": 1,
+    "meterId" : "{{meterId}}"
+  },
+  "usageType" : "metered",
+  "transformQuantity" : {
+    "divideBy" : 10,
+    "round" : "up"
+  },
+  "unitAmount" : 5,
+  "unitAmountDecimal" : 5
+}

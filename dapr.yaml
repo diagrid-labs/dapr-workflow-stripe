@@ -16,10 +16,17 @@ apps:
     command: ["dotnet", "run"]
     appLogDestination: fileAndConsole
     daprdLogDestination: fileAndConsole
-#  - appID: shipping
-#    appDirPath: ShippingApp
-#    appPort: 5051
-#    daprHTTPPort: 3506
-#    command: ["dotnet", "run"]
-#    appLogDestination: fileAndConsole
-#    daprdLogDestination: fileAndConsole
+  - appID: pricing
+    appDirPath: PricingManagement
+    appPort: 5051
+    daprHTTPPort: 3514
+    command: ["dotnet", "run"]
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole
+  - appID: shipping
+    appDirPath: ShippingApp
+    appPort: 5053
+    daprHTTPPort: 3516
+    command: ["dotnet", "run"]
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole
