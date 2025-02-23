@@ -73,7 +73,7 @@ app.MapGet("/customer/{email}", async (
         var service = new CustomerService();
         var options = new CustomerSearchOptions
         {
-            Query = $"email:'{email}'",
+            Query = $"email:\"{email}\"",
         };
         var searchResults = await service.SearchAsync(options);
         var foundCustomer = searchResults.FirstOrDefault();

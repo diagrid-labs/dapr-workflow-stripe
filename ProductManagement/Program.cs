@@ -73,7 +73,7 @@ app.MapGet("/product/{name}", async (
         var service = new ProductService();
         var options = new ProductSearchOptions
         {
-            Query = $"name:'{name}'",
+            Query = $"name:\"{name}\"",
         };
         var searchResults = await service.SearchAsync(options);
         var foundProduct = searchResults.FirstOrDefault();
