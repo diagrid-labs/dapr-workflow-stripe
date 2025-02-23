@@ -1,0 +1,18 @@
+version: 1
+common:
+  resourcesPath: Resources
+apps:
+  - appID: customer
+    appDirPath: CustomerManagement
+    appPort: 5047
+    daprHTTPPort: 3510
+    command: ["dotnet", "run"]
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole
+#  - appID: shipping
+#    appDirPath: ShippingApp
+#    appPort: 5051
+#    daprHTTPPort: 3506
+#    command: ["dotnet", "run"]
+#    appLogDestination: fileAndConsole
+#    daprdLogDestination: fileAndConsole

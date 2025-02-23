@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+[Ss]ecrets.json
+
 # User-specific files
 *.rsuser
 *.suo
