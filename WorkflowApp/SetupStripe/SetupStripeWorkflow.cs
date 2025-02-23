@@ -26,6 +26,9 @@ namespace WorkflowApp.SetupStripe
                 var createdPrice = await context.CallActivityAsync<CreatePriceOutput>(
                     nameof(CreatePrice),
                     new CreatePriceInput(productPrice.PriceLookupKey, createdMeter.Id, createdProduct.Id, productPrice.UnitAmount));
+                var createdSubscription = await context.CallActivityAsync<CreateSubscriptionOutput>(
+                    nameof(CreateSubscription),
+                    new CreateSubscriptionInput(createdCustomer.Id, createdPrice.Id));
             }
 
             return new SetupStripeOutput(IsSuccess: true);

@@ -41,5 +41,5 @@ namespace WorkflowApp.SetupStripe
     }
 
     public record CreateCustomerInput(string Name, string Email);
-    public record CreateCustomerOutput(string CustomerId, bool IsSuccess);
+    public record CreateCustomerOutput(string Id, bool IsSuccess);
 }

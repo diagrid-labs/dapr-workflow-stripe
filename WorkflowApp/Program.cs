@@ -22,7 +22,6 @@ app.MapPost("/setupStripe", async (
     SetupStripeInput input,
     DaprWorkflowClient daprWorkflowClient
     ) => {
-        
         var instanceId = await daprWorkflowClient.ScheduleNewWorkflowAsync(
             nameof(SetupStripeWorkflow),
             input: input);
