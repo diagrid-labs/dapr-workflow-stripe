@@ -1,4 +1,4 @@
-@appUrl= http://localhost:5053
+@appUrl= http://localhost:5253
 @daprUrl= http://localhost:3516
 
 ### Setup Stripe
@@ -15,9 +15,9 @@ Content-Type: application/json
         {
             "productName": "Paid plan 2",
             "priceLookupKey": "paid_calculation_usage_2",
-            "unitAmount": 5,
+            "unitAmount": 5
         }
-    ],
+    ]
 }
 
 ### GET workflow status directly via the Dapr HTTP API

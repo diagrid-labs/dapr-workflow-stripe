@@ -10,13 +10,13 @@ namespace WorkflowApp.SetupStripe
                 nameof(CreateCustomer),
                 new CreateCustomerInput(input.CustomerName, input.CustomerEmail));
 
-            if (!createdCustomer.IsSuccess) return new SetupStripeOutput(IsSuccess: false, LastActivity: nameof(CreateCustomer));
+            if (!createdCustomer.IsSuccess) return new SetupStripeOutput(IsSuccess: false, LastActivity: nameof(CreateCustomer), createdCustomer.Message);
             
             var createdMeter = await context.CallActivityAsync<CreateMeterOutput>(
                 nameof(CreateMeter),
                 new CreateMeterInput(input.MeterName, input.MeterEventName));
 
-            if (!createdMeter.IsSuccess) return new SetupStripeOutput(IsSuccess: false, LastActivity: nameof(CreateMeter));
+            if (!createdMeter.IsSuccess) return new SetupStripeOutput(IsSuccess: false, LastActivity: nameof(CreateMeter), createdMeter.Message);
 
             foreach (var productPrice in input.ProductPrices)
             {
@@ -43,7 +43,8 @@ namespace WorkflowApp.SetupStripe
         string MeterEventName);
     public record SetupStripeOutput(
         bool IsSuccess,
-        string LastActivity = "");
+        string LastActivity = "",
+        string Message = "");
     public record ProductPrice(
         string ProductName,
         string PriceLookupKey,
