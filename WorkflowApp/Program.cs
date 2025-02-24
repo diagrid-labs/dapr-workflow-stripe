@@ -3,8 +3,6 @@ using WorkflowApp.SetupStripe;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
 builder.Services.AddDaprClient();
 builder.Services.AddDaprWorkflowClient();
@@ -18,7 +16,7 @@ builder.Services.AddDaprWorkflow(options =>{
 });
 var app = builder.Build();
 
-app.MapPost("/setupStripe", async (
+app.MapPost("/setupstripe", async (
     SetupStripeInput input,
     DaprWorkflowClient daprWorkflowClient
     ) => {
@@ -28,3 +26,5 @@ app.MapPost("/setupStripe", async (
 
         return Results.Accepted(instanceId);
 });
+
+app.Run();

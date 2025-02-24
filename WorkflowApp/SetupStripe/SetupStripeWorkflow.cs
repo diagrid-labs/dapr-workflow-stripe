@@ -41,6 +41,11 @@ namespace WorkflowApp.SetupStripe
         ProductPrice[] ProductPrices,
         string MeterName,
         string MeterEventName);
-    public record SetupStripeOutput(bool IsSuccess, string LastActivity = "");
-    public record ProductPrice(string ProductName, string PriceLookupKey, decimal UnitAmount);
+    public record SetupStripeOutput(
+        bool IsSuccess,
+        string LastActivity = "");
+    public record ProductPrice(
+        string ProductName,
+        string PriceLookupKey,
+        decimal UnitAmount);
 }

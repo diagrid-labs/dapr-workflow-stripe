@@ -1,0 +1,25 @@
+@appUrl= http://localhost:5053
+@daprUrl= http://localhost:3516
+
+### Setup Stripe
+# @name setupstripeRequest
+POST {{appUrl}}/setupstripe
+Content-Type: application/json
+
+{
+    "customerName": "Ada Lovelace",
+    "customerEmail": "ada@lovelate.org",
+    "meterName": "Calculation API 2",
+    "meterEventName": "calculation_executed",
+    "productPrices": [
+        {
+            "productName": "Paid plan 2",
+            "priceLookupKey": "paid_calculation_usage_2",
+            "unitAmount": 5,
+        }
+    ],
+}
+
+### GET workflow status directly via the Dapr HTTP API
+@instanceId={{setupstripeRequest.response.headers.Location}}
+GET {{daprUrl}}/v1.0-beta1/workflows/dapr/{{instanceId}}
