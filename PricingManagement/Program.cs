@@ -3,20 +3,12 @@ using Stripe;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
 const string SECRET_STORE_NAME = "daprSecretStore";
 const string STRIPE_KEY_NAME = "stripeKey";
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
 
 app.UseHttpsRedirection();
 
