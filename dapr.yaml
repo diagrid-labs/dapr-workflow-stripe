@@ -2,27 +2,27 @@ version: 1
 common:
   resourcesPath: Resources
 apps:
-  - appID: customer
-    appDirPath: CustomerManagement
-    appPort: 5247
-    daprHTTPPort: 3510
-    command: ["dotnet", "run"]
-    appLogDestination: fileAndConsole
-    daprdLogDestination: fileAndConsole
-  - appID: product
-    appDirPath: ProductManagement
-    appPort: 5249
-    daprHTTPPort: 3512
-    command: ["dotnet", "run"]
-    appLogDestination: fileAndConsole
-    daprdLogDestination: fileAndConsole
-  - appID: pricing
-    appDirPath: PricingManagement
-    appPort: 5251
-    daprHTTPPort: 3514
-    command: ["dotnet", "run"]
-    appLogDestination: fileAndConsole
-    daprdLogDestination: fileAndConsole
+  # - appID: customer
+  #   appDirPath: CustomerManagement
+  #   appPort: 5247
+  #   daprHTTPPort: 3510
+  #   command: ["dotnet", "run"]
+  #   appLogDestination: fileAndConsole
+  #   daprdLogDestination: fileAndConsole
+  # - appID: product
+  #   appDirPath: ProductManagement
+  #   appPort: 5249
+  #   daprHTTPPort: 3512
+  #   command: ["dotnet", "run"]
+  #   appLogDestination: fileAndConsole
+  #   daprdLogDestination: fileAndConsole
+  # - appID: pricing
+  #   appDirPath: PricingManagement
+  #   appPort: 5251
+  #   daprHTTPPort: 3514
+  #   command: ["dotnet", "run"]
+  #   appLogDestination: fileAndConsole
+  #   daprdLogDestination: fileAndConsole
   - appID: workflow
     appDirPath: WorkflowApp
     appPort: 5253
