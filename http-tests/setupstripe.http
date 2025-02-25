@@ -9,13 +9,18 @@ Content-Type: application/json
 {
     "customerName": "Ada Lovelace",
     "customerEmail": "ada@lovelate.org",
-    "meterName": "Calculation API 2",
+    "meterName": "Calculation API",
     "meterEventName": "calculation_executed",
     "productPrices": [
         {
-            "productName": "Paid plan 2",
-            "priceLookupKey": "paid_calculation_usage_2",
+            "productName": "Paid plan",
+            "priceLookupKey": "paid_calculation_usage",
             "unitAmount": 5
+        },
+        {
+            "productName": "Free plan",
+            "priceLookupKey": "free_calculation_usage",
+            "unitAmount": 0
         }
     ]
 }

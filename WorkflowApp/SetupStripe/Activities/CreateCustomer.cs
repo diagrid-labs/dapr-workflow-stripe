@@ -24,35 +24,14 @@ namespace WorkflowApp.SetupStripe
                 Constants.STRIPE_KEY_NAME);
             StripeConfiguration.ApiKey = secretDictionary[Constants.STRIPE_KEY_NAME];
 
-            string customerId = string.Empty;
-            var listOptions = new CustomerListOptions
-            {
-                Limit = 5,
-            };
             var service = new CustomerService();
-            var customers = await service.ListAsync(listOptions);
-            if (customers != null)
-            {
-                var matchingCustomer = customers.FirstOrDefault(c => c.Email == input.Email);
-                if (matchingCustomer != null)
-                {
-                    customerId = matchingCustomer.Id;
-                    _logger.LogInformation("Customer already exists: {Name} {ID}.",
-                        matchingCustomer.Name,
-                        matchingCustomer.Id);
-                }
-            }
+            string customerId = await GetMatchingCustomer(input.Email, service);
 
             if (customerId == string.Empty)
             {
-                var createOptions = new CustomerCreateOptions
-                {
-                    Email = input.Email,
-                    Name = input.Name
-                };
-
                 try
                 {
+                    CustomerCreateOptions createOptions = GetCreateOptions(input);
                     var created = await service.CreateAsync(createOptions);
                     customerId = created.Id;
                     _logger.LogInformation("Successfully created new customer: {Name} {ID}.",
@@ -67,6 +46,38 @@ namespace WorkflowApp.SetupStripe
             }
 
             return new CreateCustomerOutput(customerId, IsSuccess: true);
+        }
+
+        private async Task<string> GetMatchingCustomer(string email, CustomerService service)
+        {
+            string customerId = string.Empty;
+            var listOptions = new CustomerListOptions
+            {
+                Limit = 5,
+            };
+            var customers = await service.ListAsync(listOptions);
+            if (customers != null)
+            {
+                var matchingCustomer = customers.FirstOrDefault(c => c.Email == email);
+                if (matchingCustomer != null)
+                {
+                    customerId = matchingCustomer.Id;
+                    _logger.LogInformation("Customer already exists: {Name} {ID}.",
+                        matchingCustomer.Name,
+                        matchingCustomer.Id);
+                }
+            }
+
+            return customerId;
+        }
+
+        private static CustomerCreateOptions GetCreateOptions(CreateCustomerInput input)
+        {
+            return new CustomerCreateOptions
+            {
+                Email = input.Email,
+                Name = input.Name
+            };
         }
     }
 

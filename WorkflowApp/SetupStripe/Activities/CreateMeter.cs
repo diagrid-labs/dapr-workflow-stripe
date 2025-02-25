@@ -1,6 +1,7 @@
 ﻿using Dapr.Client;
 using Dapr.Workflow;
 using Stripe;
+using Stripe.Billing;
 
 namespace WorkflowApp.SetupStripe
 {
@@ -24,49 +25,14 @@ namespace WorkflowApp.SetupStripe
                 Constants.STRIPE_KEY_NAME);
             StripeConfiguration.ApiKey = secretDictionary[Constants.STRIPE_KEY_NAME];
 
-            string meterId = string.Empty;
-
-            var listOptions = new Stripe.Billing.MeterListOptions
-            {
-                Limit = 5,
-            };
-            var service = new Stripe.Billing.MeterService();
-            var meters = await service.ListAsync(listOptions);
-            if (meters != null)
-            {
-                var matchingMeter = meters.FirstOrDefault(m => m.EventName == input.EventName);
-                if (matchingMeter != null)
-                {
-                    meterId = matchingMeter.Id;
-                    _logger.LogInformation("Meter already exists: {Name} {ID}.",
-                        matchingMeter.DisplayName,
-                        matchingMeter.Id);
-                }
-            }
+            var service = new MeterService();
+            string meterId = await GetMatchingMeter(input.EventName, service);
 
             if (meterId == string.Empty)
             {
-                var createOptions = new Stripe.Billing.MeterCreateOptions
-                {
-                    DisplayName = input.Name,
-                    EventName = input.EventName,
-                    DefaultAggregation = new Stripe.Billing.MeterDefaultAggregationOptions
-                    {
-                        Formula = "sum",
-                    },
-                    ValueSettings = new Stripe.Billing.MeterValueSettingsOptions
-                    {
-                        EventPayloadKey = "value",
-                    },
-                    CustomerMapping = new Stripe.Billing.MeterCustomerMappingOptions
-                    {
-                        Type = "by_id",
-                        EventPayloadKey = "stripe_customer_id",
-                    },
-                };
-
                 try
                 {
+                    MeterCreateOptions createOptions = GetCreateOptions(input);
                     var created = await service.CreateAsync(createOptions);
                     meterId = created.Id;
                     _logger.LogInformation("Successfully created new meter: {Name} {ID}.",
@@ -82,6 +48,53 @@ namespace WorkflowApp.SetupStripe
 
             return new CreateMeterOutput(meterId, IsSuccess: true);
         }
+
+        private async Task<string> GetMatchingMeter(string meterEventName, MeterService service)
+        {
+            string meterId = string.Empty;
+            var listOptions = new MeterListOptions
+            {
+                Limit = 5,
+            };
+            var meters = await service.ListAsync(listOptions);
+            if (meters != null)
+            {
+                var matchingMeter = meters.FirstOrDefault(m => m.EventName == meterEventName);
+                if (matchingMeter != null)
+                {
+                    meterId = matchingMeter.Id;
+                    _logger.LogInformation("Meter already exists: {Name} {ID}.",
+                        matchingMeter.DisplayName,
+                        matchingMeter.Id);
+                }
+            }
+
+            return meterId;
+        }
+
+        private static MeterCreateOptions GetCreateOptions(CreateMeterInput input)
+        {
+            return new MeterCreateOptions
+            {
+                DisplayName = input.Name,
+                EventName = input.EventName,
+                DefaultAggregation = new MeterDefaultAggregationOptions
+                {
+                    Formula = "sum",
+                },
+                ValueSettings = new MeterValueSettingsOptions
+                {
+                    EventPayloadKey = "value",
+                },
+                CustomerMapping = new MeterCustomerMappingOptions
+                {
+                    Type = "by_id",
+                    EventPayloadKey = "stripe_customer_id",
+                },
+            };
+        }
+
+        
     }
 
     public record CreateMeterInput(string Name, string EventName);
