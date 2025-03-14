@@ -2,9 +2,9 @@ using Dapr.Workflow;
 
 namespace MeteringDemoWorkflowApp
 {
-    public class MeteredActivityWorkflow : Workflow<MeteredChildWorkflowInput, MeteredChildWorkflowOutput>
+    public class MeteredActivityWorkflow : Workflow<MeteredActivityWorkflowInput, MeteredActivityWorkflowOutput>
     {
-        public override async Task<MeteredChildWorkflowOutput> RunAsync(WorkflowContext context, MeteredChildWorkflowInput input)
+        public override async Task<MeteredActivityWorkflowOutput> RunAsync(WorkflowContext context, MeteredActivityWorkflowInput input)
         {
             var output = await context.CallActivityAsync<object>(
                 input.ActivityName,
@@ -14,15 +14,15 @@ namespace MeteringDemoWorkflowApp
                 nameof(CreateMeterEvent),
                 new CreateMeterEventInput(input.CustomerId));
 
-            return new MeteredChildWorkflowOutput(output, IsSuccess: true);
+            return new MeteredActivityWorkflowOutput(output, IsSuccess: true);
         }
     }
 
-    public record MeteredChildWorkflowInput(
+    public record MeteredActivityWorkflowInput(
         string CustomerId,
         string ActivityName,
         object ActivityInput);
-    public record MeteredChildWorkflowOutput(
+    public record MeteredActivityWorkflowOutput(
         object ActivityOutput,
         bool IsSuccess,
         string Message = "");

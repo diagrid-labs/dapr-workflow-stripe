@@ -12,7 +12,7 @@ namespace MeteringDemoWorkflowApp
 
             var childResult = await context.CallChildWorkflowAsync<CallLLMOutput>(
                 nameof(MeteredActivityWorkflow),
-                new MeteredChildWorkflowInput(
+                new MeteredActivityWorkflowInput(
                     CustomerId: identifyCustomerOutput.CustomerId,
                     ActivityName: nameof(CallLLM),
                     ActivityInput: new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId)));
