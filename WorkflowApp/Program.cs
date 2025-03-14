@@ -1,4 +1,5 @@
 using Dapr.Workflow;
+using Microsoft.AspNetCore.Http.HttpResults;
 using WorkflowApp.SetupStripe;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ app.MapPost("/setupstripe", async (
             nameof(SetupStripeWorkflow),
             input: input);
 
-        return Results.Accepted(instanceId);
-});
+    return Results.Accepted(instanceId);
+    });
 
 app.Run();
