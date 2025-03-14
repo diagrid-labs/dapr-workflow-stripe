@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement", "Produc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricingManagement", "PricingManagement\PricingManagement.csproj", "{2458D49E-E460-4B2F-A507-2CDB831630F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowApp", "WorkflowApp\WorkflowApp.csproj", "{5FDCA194-C616-4B89-BB44-358FA3B8BAF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetupStripeWorkflowApp", "SetupStripeWorkflowApp\SetupStripeWorkflowApp.csproj", "{5FDCA194-C616-4B89-BB44-358FA3B8BAF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
