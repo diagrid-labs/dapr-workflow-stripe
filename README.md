@@ -21,16 +21,24 @@ The devcontainer configuration that is included in this repo contains the .NET S
 
 
 
-### 3. Run the Workflow application
+### 3. Run the SetupStripeWorkflowApp application
 
-Open a terminal in the root of the repository and start the Workflow application using the Dapr CLI:
+Open a terminal in the root of the repository and start the SetupStripeWorkflowApp application using the Dapr CLI:
 
 ```bash
-dapr run --app-id workflow-app --resources-path ./Resources --app-port 5253 --dapr-http-port 3516 -- dotnet run --project ./SetupStripeWorkflowApp/
+dapr run --app-id setup-app --resources-path ./Resources --app-port 5253 --dapr-http-port 3516 -- dotnet run --project ./SetupStripeWorkflowApp/
 ```
 
 ## 4. Starting the SetupStripeWorkflow
 
 If you're using the devcontainer, open the [setupstripe.http](/LocalTests/setupstripe.http) file and use the REST Client extension to make requests to the WorkflowApp.
 
-## 5. Starting the SetupStripeWorkflow
+Once you've made the request and verified the workflow has completed successfully, you can stop the SetupStripeWorkflowApp.
+
+## 5. Run the MeteringDemoWorkflowApp application
+
+Open a terminal in the root of the repository and start the MeteringDemoWorkflowApp application using the Dapr CLI:
+
+```bash
+dapr run --app-id meter-app --resources-path ./Resources --app-port 5255 --dapr-http-port 3518 -- dotnet run --project ./MeteringDemoWorkflowApp/
+```

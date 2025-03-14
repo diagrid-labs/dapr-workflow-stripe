@@ -1,0 +1,15 @@
+@appUrl= http://localhost:5255
+@daprUrl= http://localhost:3518
+
+### Meter Demo
+# @name meterDemoRequest
+POST {{appUrl}}/run
+Content-Type: application/json
+
+{
+    "customerEmail": "ada@lovelace.org",
+}
+
+### GET workflow status directly via the Dapr HTTP API
+@instanceId={{meterDemoRequest.response.headers.Location}}
+GET {{daprUrl}}/v1.0/workflows/dapr/{{instanceId}}
