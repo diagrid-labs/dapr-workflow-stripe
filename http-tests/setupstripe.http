@@ -27,4 +27,4 @@ Content-Type: application/json
 
 ### GET workflow status directly via the Dapr HTTP API
 @instanceId={{setupstripeRequest.response.headers.Location}}
-GET {{daprUrl}}/v1.0-beta1/workflows/dapr/{{instanceId}}
+GET {{daprUrl}}/v1.0/workflows/dapr/{{instanceId}}

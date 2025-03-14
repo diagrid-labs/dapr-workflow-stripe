@@ -5,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDaprClient();
-builder.Services.AddDaprWorkflowClient();
 builder.Services.AddDaprWorkflow(options =>{
     options.RegisterWorkflow<SetupStripeWorkflow>();
     options.RegisterActivity<CreateCustomer>();
@@ -17,10 +16,12 @@ builder.Services.AddDaprWorkflow(options =>{
 var app = builder.Build();
 
 app.MapPost("/setupstripe", async (
-    SetupStripeInput input,
-    DaprWorkflowClient daprWorkflowClient
+    SetupStripeInput input
     ) => {
-        var instanceId = await daprWorkflowClient.ScheduleNewWorkflowAsync(
+        
+        var workflowClient = app.Services.GetRequiredService<DaprWorkflowClient>();
+
+        var instanceId = await workflowClient.ScheduleNewWorkflowAsync(
             nameof(SetupStripeWorkflow),
             input: input);
 
