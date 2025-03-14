@@ -10,9 +10,20 @@ namespace MeteringDemoWorkflowApp
                 nameof(IdentifyCustomer),
                 new IdentifyCustomerInput(input.CustomerEmail));
 
-            var callLLMOutput = await context.CallActivityAsync<CallLLMOutput>(
-                nameof(CallLLM),
-                new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId));
+            // var callLLMOutput = await context.CallActivityAsync<CallLLMOutput>(
+            //     nameof(CallLLM),
+            //     new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId));
+
+            var childResult = await context.CallChildWorkflowAsync<CallLLMOutput>(
+                nameof(MeteredChildWorkflow),
+                new MeteredChildWorkflowInput(
+                    CustomerId: identifyCustomerOutput.CustomerId,
+                    ActivityName: nameof(CallLLM),
+                    ActivityInput: new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId)));
+
+            // var createMeterEventOutput = await context.CallActivityAsync<CreateMeterEventOutput>(
+            //     nameof(CreateMeterEvent),
+            //     new CreateMeterEventInput(identifyCustomerOutput.CustomerId));
 
             return new MeteringDemoOutput(IsSuccess: true);
         }
