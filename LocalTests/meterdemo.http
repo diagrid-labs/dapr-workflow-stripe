@@ -7,7 +7,7 @@ POST {{appUrl}}/run
 Content-Type: application/json
 
 {
-    "customerEmail": "ada@lovelace.org",
+    "customerEmail": "ada@lovelace.org"
 }
 
 ### GET workflow status directly via the Dapr HTTP API

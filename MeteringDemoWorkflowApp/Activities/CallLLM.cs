@@ -20,7 +20,15 @@ namespace MeteringDemoWorkflowApp
         {
             _logger.LogInformation("Calling LLM with prompt: {Prompt}.", input.Prompt);
 
-            await CreateMeterEvent(input.CustomerId);
+            try
+            {
+                await CreateMeterEvent(input.CustomerId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create meter event.");
+                return new CallLLMOutput("Test", IsSuccess: false, Message: ex.Message);
+            }
 
             return new CallLLMOutput("Test", IsSuccess: true);
         }
@@ -35,13 +43,14 @@ namespace MeteringDemoWorkflowApp
             var eventId = Guid.NewGuid().ToString("N");
             var options = new Stripe.Billing.MeterEventCreateOptions
             {
-                EventName = "calculation_execution",
+                EventName = "calculation_executed",
                 Payload = new Dictionary<string, string>
                 {
                     { "value", "10" },
                     { "stripe_customer_id", $"{customerId}" },
                 },
                 Identifier = $"{eventId}",
+                Timestamp = DateTime.UtcNow,
             };
             var service = new Stripe.Billing.MeterEventService();
             service.Create(options);
