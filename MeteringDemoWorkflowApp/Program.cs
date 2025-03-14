@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDaprClient();
 builder.Services.AddDaprWorkflow(options =>{
     options.RegisterWorkflow<MeteringDemoWorkflow>();
-    options.RegisterWorkflow<MeteredChildWorkflow>();
+    options.RegisterWorkflow<MeteredActivityWorkflow>();
     options.RegisterActivity<IdentifyCustomer>();
     options.RegisterActivity<CallLLM>();
     options.RegisterActivity<CreateMeterEvent>();

@@ -2,7 +2,7 @@ using Dapr.Workflow;
 
 namespace MeteringDemoWorkflowApp
 {
-    public class MeteredChildWorkflow : Workflow<MeteredChildWorkflowInput, MeteredChildWorkflowOutput>
+    public class MeteredActivityWorkflow : Workflow<MeteredChildWorkflowInput, MeteredChildWorkflowOutput>
     {
         public override async Task<MeteredChildWorkflowOutput> RunAsync(WorkflowContext context, MeteredChildWorkflowInput input)
         {

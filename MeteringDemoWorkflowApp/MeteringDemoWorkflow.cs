@@ -10,20 +10,12 @@ namespace MeteringDemoWorkflowApp
                 nameof(IdentifyCustomer),
                 new IdentifyCustomerInput(input.CustomerEmail));
 
-            // var callLLMOutput = await context.CallActivityAsync<CallLLMOutput>(
-            //     nameof(CallLLM),
-            //     new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId));
-
             var childResult = await context.CallChildWorkflowAsync<CallLLMOutput>(
-                nameof(MeteredChildWorkflow),
+                nameof(MeteredActivityWorkflow),
                 new MeteredChildWorkflowInput(
                     CustomerId: identifyCustomerOutput.CustomerId,
                     ActivityName: nameof(CallLLM),
                     ActivityInput: new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId)));
-
-            // var createMeterEventOutput = await context.CallActivityAsync<CreateMeterEventOutput>(
-            //     nameof(CreateMeterEvent),
-            //     new CreateMeterEventInput(identifyCustomerOutput.CustomerId));
 
             return new MeteringDemoOutput(IsSuccess: true);
         }
@@ -36,8 +28,4 @@ namespace MeteringDemoWorkflowApp
         bool IsSuccess,
         string LastActivity = "",
         string Message = "");
-    public record ProductPrice(
-        string ProductName,
-        string PriceLookupKey,
-        decimal UnitAmount);
 }
