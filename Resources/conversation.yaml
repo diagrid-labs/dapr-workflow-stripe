@@ -1,0 +1,18 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: myLLM
+spec:
+  type: conversation.anthropic
+  metadata:
+  - name: key
+    secretKeyRef:
+      name: anthropicKey
+      key:  anthropicKey
+  - name: model
+    value: claude-3-5-haiku-20241022
+  - name: cacheTTL
+    value: 10m
+
+auth:
+  secretStore: daprSecretStore

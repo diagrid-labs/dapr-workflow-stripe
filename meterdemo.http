@@ -7,7 +7,11 @@ POST {{appUrl}}/run
 Content-Type: application/json
 
 {
-    "customerEmail": "ada@lovelace.org"
+    "customerEmail": "ada@lovelace.org",
+    "prompts":[
+        "Explain Dapr, the distributed application runtime in one sentence.",
+        "If Dapr was a super hero, who would it be and why? Explain in one sentence."
+    ] 
 }
 
 ### GET workflow status directly via the Dapr HTTP API

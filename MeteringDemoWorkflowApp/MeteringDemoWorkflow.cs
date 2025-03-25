@@ -10,21 +10,26 @@ namespace MeteringDemoWorkflowApp
                 nameof(IdentifyCustomer),
                 new IdentifyCustomerInput(input.CustomerEmail));
 
-            var childResult = await context.CallChildWorkflowAsync<CallLLMOutput>(
-                nameof(MeteredActivityWorkflow),
-                new MeteredActivityWorkflowInput(
-                    CustomerId: identifyCustomerOutput.CustomerId,
-                    ActivityName: nameof(CallLLM),
-                    ActivityInput: new CallLLMInput(input.Prompt, identifyCustomerOutput.CustomerId)));
+            if (identifyCustomerOutput.IsSuccess)
+            {
+                var childWorkflowOutput = await context.CallChildWorkflowAsync<MeteredActivityWorkflowOutput>(
+                    nameof(MeteredActivityWorkflow),
+                    new MeteredActivityWorkflowInput(
+                        CustomerId: identifyCustomerOutput.CustomerId,
+                        ActivityInput: new LLMInput(input.Prompts, identifyCustomerOutput.CustomerId)));
 
-            return new MeteringDemoOutput(IsSuccess: true);
+                return new MeteringDemoOutput(Response: childWorkflowOutput.ActivityOutput.Response, IsSuccess: true);
+            }
+
+            return new MeteringDemoOutput(Response: null, IsSuccess: false, Message: "Failed to identify customer.");
         }
     }
 
     public record MeteringDemoInput(
         string CustomerEmail,
-        string Prompt);
+        string[] Prompts);
     public record MeteringDemoOutput(
+        IEnumerable<string>? Response,
         bool IsSuccess,
         string LastActivity = "",
         string Message = "");

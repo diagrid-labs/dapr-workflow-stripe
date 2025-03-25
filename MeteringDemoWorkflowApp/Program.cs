@@ -1,8 +1,11 @@
+using Dapr.AI.Conversation;
+using Dapr.AI.Conversation.Extensions;
 using Dapr.Workflow;
 using MeteringDemoWorkflowApp;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDaprClient();
+builder.Services.AddDaprConversationClient();
 builder.Services.AddDaprWorkflow(options =>{
     options.RegisterWorkflow<MeteringDemoWorkflow>();
     options.RegisterWorkflow<MeteredActivityWorkflow>();

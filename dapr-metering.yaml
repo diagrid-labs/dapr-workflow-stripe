@@ -1,0 +1,11 @@
+version: 1
+common:
+  resourcesPath: Resources
+apps:
+  - appID: metering-demo
+    appDirPath: MeteringDemoWorkflowApp
+    appPort: 5255
+    daprHTTPPort: 3518
+    command: ["dotnet", "run"]
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole

@@ -6,24 +6,23 @@ namespace MeteringDemoWorkflowApp
     {
         public override async Task<MeteredActivityWorkflowOutput> RunAsync(WorkflowContext context, MeteredActivityWorkflowInput input)
         {
-            var output = await context.CallActivityAsync<object>(
-                input.ActivityName,
+            var llmOutput = await context.CallActivityAsync<LLMOutput>(
+                nameof(CallLLM),
                 input.ActivityInput);
 
             var createMeterEventOutput = await context.CallActivityAsync<CreateMeterEventOutput>(
                 nameof(CreateMeterEvent),
                 new CreateMeterEventInput(input.CustomerId));
 
-            return new MeteredActivityWorkflowOutput(output, IsSuccess: true);
+            return new MeteredActivityWorkflowOutput(llmOutput, IsSuccess: true);
         }
     }
 
     public record MeteredActivityWorkflowInput(
         string CustomerId,
-        string ActivityName,
-        object ActivityInput);
+        LLMInput ActivityInput);
     public record MeteredActivityWorkflowOutput(
-        object ActivityOutput,
+        LLMOutput ActivityOutput,
         bool IsSuccess,
         string Message = "");
 }

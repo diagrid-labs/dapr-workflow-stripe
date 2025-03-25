@@ -1,0 +1,11 @@
+version: 1
+common:
+  resourcesPath: Resources
+apps:
+  - appID: setupStripeWorkflow
+    appDirPath: SetupStripeWorkflowApp
+    appPort: 5253
+    daprHTTPPort: 3516
+    command: ["dotnet", "run"]
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole
