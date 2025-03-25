@@ -1,6 +1,10 @@
 # Dapr Workflow with Stripe
 
-This repo contains two Dapr applications that demonstrate how to use the Dapr Workflow API to write workflows as code to orchestrate calls to other services.
+This repo contains two Dapr applications that demonstrate how to use the [Dapr Workflow](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-overview/) API to write workflows as code to orchestrate calls to other services that include Stripe.
+
+For instance you are building a SaaS product that calls out to LLM providers and you want to implement [usage based billing](https://stripe.com/en-nl/billing/usage-based-billing) with Stripe for the calls being made to the LLM provider.
+
+---
 
 The `SetupStripeWorkflowApp` demonstrates how to use Dapr Workflow to orchestrate calls to the Stripe API to create a customer, product, price, subscription, and meter.
 
