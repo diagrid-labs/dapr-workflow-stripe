@@ -1,5 +1,59 @@
 # Dapr Workflow with Stripe
 
+This repo contains two Dapr applications that demonstrate how to use the Dapr Workflow API to write workflows as code to orchestrate calls to other services.
+
+The `SetupStripeWorkflowApp` demonstrates how to use Dapr Workflow to orchestrate calls to the Stripe API to create a customer, product, price, subscription, and meter.
+
+```mermaid
+flowchart LR
+    START((Start))
+    END((END))
+    A[Create
+    Customer]
+    B[Create
+    Meter]
+    subgraph for each ProductPrice
+        C[Create
+        Product]
+        D[Create
+        Price]
+        E[Create
+        Subscription]
+    end
+    START --> A
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> END
+```
+
+
+The `MeteringDemoWorkflowApp` demonstrates how to use Dapr Workflow to orchestrate a call to a child workflow that contains two activities:
+
+- CallLLM: calls an LLM using the Dapr Conversation API
+- CreteMeterEvent: creates a Stripe meter event
+
+```mermaid
+flowchart LR
+    START((Start))
+    END((END))
+    A[Identify
+    Customer]
+    B[Call Metered
+    Activity Child Workflow]
+    subgraph Child Workflow
+        C[CallLLM]
+        D[Create
+        MeterEvent]
+    end
+    START --> A
+    A --> B
+    B --> C
+    C --> D
+    D --> END
+```
+
 ## Running locally
 
 ### 1a. Pre-requisites to use this repo with the devcontainer
@@ -17,28 +71,64 @@ The devcontainer configuration that is included in this repo contains the .NET S
 - [Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/)
 - [Initialize Dapr](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
 
-### 2. Create a Stipe API key
+### 1c. Accounts required
 
+To run this demo end-to-end you need accounts for:
+- [Stripe](https://stripe.com/)
+- [Anthropic](https://anthropic.com/)
 
+### 2. Create a Stripe API key and set it as a secret
 
-### 3. Run the SetupStripeWorkflowApp application
+See the Stripe [docs](https://docs.stripe.com/keys) on how to generate an API key.
 
-Open a terminal in the root of the repository and start the SetupStripeWorkflowApp application using the Dapr CLI:
+The `SetupStripeWorkflowApp` uses the Dapr Secrets API and to read the Stripe key from a local file named `secrets.json`.
+
+Rename the `secrets.json.temp` file located in the Resources folder to `secrets.json` and add the Stripe API key to the `stripeKey` field.
+
+```bash
+{
+    "stripeKey": "sk_test_***",
+    "anthropicKey" : ""
+}
+```
+
+### 3. Run the `SetupStripeWorkflowApp` application
+
+Open a terminal in the root of the repository and start the `SetupStripeWorkflowApp` application using the Dapr CLI:
 
 ```bash
 dapr run --app-id setup-app --resources-path ./Resources --app-port 5253 --dapr-http-port 3516 -- dotnet run --project ./SetupStripeWorkflowApp/
 ```
 
-## 4. Starting the SetupStripeWorkflow
+## 4. Starting the `SetupStripeWorkflow`
 
-If you're using the devcontainer, open the [setupstripe.http](/LocalTests/setupstripe.http) file and use the REST Client extension to make requests to the WorkflowApp.
+If you're using the devcontainer, open the [setupstripe.http](setupstripe.http) file and use the REST Client extension to make a request to the `SetupStripeWorkflowApp`.
 
-Once you've made the request and verified the workflow has completed successfully, you can stop the SetupStripeWorkflowApp.
+Once you've made the request and verified the workflow has completed successfully, you can stop the `SetupStripeWorkflowApp`.
 
-## 5. Run the MeteringDemoWorkflowApp application
+## 5. Create an API key for the Anthropic and set it as a secret
 
-Open a terminal in the root of the repository and start the MeteringDemoWorkflowApp application using the Dapr CLI:
+Log into Antropic and create a new [API key](https://console.anthropic.com/settings/keys).
+
+Locate the `secrets.json` file in the Resources folder and add the Anthropic API key to the `anthropicKey` field.
+
+```bash
+{
+    "stripeKey": "sk_test_***",
+    "anthropicKey" : "sk-ant-api03-***"
+}
+```
+
+## 6. Run the `MeteringDemoWorkflowApp` application
+
+Open a terminal in the root of the repository and start the `MeteringDemoWorkflowApp` application using the Dapr CLI:
 
 ```bash
 dapr run --app-id meter-app --resources-path ./Resources --app-port 5255 --dapr-http-port 3518 -- dotnet run --project ./MeteringDemoWorkflowApp/
 ```
+
+## 7. Starting the `MeteredActivityWorkflow`
+
+If you're using the devcontainer, open the [meterdemo.http](meterdemo.http) file and use the REST Client extension to make a request to the `MeteredActivityWorkflowApp`.
+
+Once you've made the request and verified the workflow has completed successfully, you can stop the `MeteredActivityWorkflowApp`.
