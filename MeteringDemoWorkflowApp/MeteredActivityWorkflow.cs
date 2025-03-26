@@ -10,9 +10,16 @@ namespace MeteringDemoWorkflowApp
                 nameof(CallLLM),
                 input.ActivityInput);
 
-            var createMeterEventOutput = await context.CallActivityAsync<CreateMeterEventOutput>(
-                nameof(CreateMeterEvent),
-                new CreateMeterEventInput(input.CustomerId));
+            List<Task<CreateMeterEventOutput>> createMeterEventTasks = [];
+            foreach (var prompt in input.ActivityInput.Prompts)
+            {
+                createMeterEventTasks.Add(
+                    context.CallActivityAsync<CreateMeterEventOutput>(
+                        nameof(CreateMeterEvent),
+                        new CreateMeterEventInput(input.CustomerId)));
+            }
+
+            await Task.WhenAll(createMeterEventTasks);
 
             return new MeteredActivityWorkflowOutput(llmOutput, IsSuccess: true);
         }

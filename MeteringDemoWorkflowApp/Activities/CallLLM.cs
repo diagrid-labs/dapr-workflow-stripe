@@ -1,5 +1,7 @@
-﻿using Dapr.AI.Conversation;
+﻿using System.Net.Mime;
+using Dapr.AI.Conversation;
 using Dapr.Workflow;
+using Microsoft.AspNetCore.Identity;
 
 namespace MeteringDemoWorkflowApp
 {
@@ -16,11 +18,14 @@ namespace MeteringDemoWorkflowApp
 
         public override async Task<LLMOutput> RunAsync(WorkflowActivityContext context, LLMInput input)
         {
-            _logger.LogInformation("Calling LLM with prompts: {Prompts}.", input.Prompts);
+            _logger.LogInformation("Calling LLM with {Prompts} prompt(s).", input.Prompts.Length);
             var conversationInputs = new List<DaprConversationInput>();
             foreach (var prompt in input.Prompts)
             {
-                conversationInputs.Add( new (prompt, DaprConversationRole.Generic));
+                conversationInputs.Add(new (
+                    Content: prompt,
+                    Role: DaprConversationRole.Generic,
+                    ScrubPII: true));
             }
             
             var conversationResponse = await _conversationClient.ConverseAsync(

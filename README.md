@@ -48,8 +48,10 @@ flowchart LR
     Activity Child Workflow]
     subgraph Child Workflow
         C[CallLLM]
-        D[Create
-        MeterEvent]
+        subgraph for each LLM Result
+            D[Create
+            MeterEvent]
+        end
     end
     START --> A
     A --> B

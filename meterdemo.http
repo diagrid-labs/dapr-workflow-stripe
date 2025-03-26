@@ -10,7 +10,7 @@ Content-Type: application/json
     "customerEmail": "ada@lovelace.org",
     "prompts":[
         "Explain Dapr, the distributed application runtime in one sentence.",
-        "If Dapr was a super hero, who would it be and why? Explain in one sentence."
+        "If Dapr and Stripe was a super hero duo, who would they be and why? Explain in two sentences."
     ] 
 }
 
